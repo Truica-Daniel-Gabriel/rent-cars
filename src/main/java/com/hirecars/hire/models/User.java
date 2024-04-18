@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @Builder
@@ -27,7 +29,12 @@ public class User {
     @Setter(AccessLevel.NONE)
     String password;
 
-    @Column(name = "userRole")
+    @Column(name = "user_role")
     @Enumerated(EnumType.STRING)
     UserRole userRole;
+
+    @Column(name = "account_status")
+    @Enumerated(EnumType.STRING)
+    AccountStatus accountStatus;
+
 }

@@ -6,6 +6,8 @@ import lombok.experimental.SuperBuilder;
 @Getter
 @Setter
 @SuperBuilder
-public class MessageResponse {
-    private String message;
+public class RegisterResponse extends MessageResponse {
+  private String account_token;
+  private String email;
+  private String fullName;
 }

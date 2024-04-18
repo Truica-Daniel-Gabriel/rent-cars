@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Title</title>
+        <style>
+            body {
+               font-family: Arial, Helvetica, sans-serif;
+               margin: 0;
+               padding:60px 125px 0;
+               display: flex;
+               flex-direction:column;
+            }
+
+            .title {
+              margin-top:0;
+              font-size:55px;
+            }
+
+            .description {
+              font-size: 17px;
+              font-weight: 500;
+              margin-top:1.2rem;
+            }
+
+            body > .activateButton {
+              padding: 31px 40px;
+              font-size: 26px;
+              border-radius: 28px;
+              margin: 2.5rem auto 0;
+            }
+        </style>
+
+    </head>
+    <body>
+      <h1 class="title">Account confirmation</h1>
+      <h2>Hello $userName</h2>
+      <p class="description">Thanks for registering, you are almost done, what you need to do now is to activate your account by clicking <a href="http://localhost:8081/api/v1/auth/activateAccount/$userToken">here</a>.</p>
+    </body>
+</html>

@@ -1,17 +1,20 @@
 package com.hirecars.hire.services;
 
+import com.hirecars.hire.core.exceptions.AccountTokenExpired;
+import com.hirecars.hire.core.exceptions.BusinessException;
 import com.hirecars.hire.models.User;
 import com.hirecars.hire.models.dto.request.LoginRequest;
 import com.hirecars.hire.models.dto.request.RegisterRequest;
 import com.hirecars.hire.models.dto.response.MessageResponse;
+import com.hirecars.hire.models.dto.response.RegisterResponse;
 
 public interface UserService {
 
-    MessageResponse userRegistration(RegisterRequest userCredentials);
+    RegisterResponse register(RegisterRequest userCredentials);
 
-    MessageResponse userAuthentication(LoginRequest userCredentials);
+    User update();
 
-    User userUpdate();
+    String activateAccount(String userToken) throws BusinessException, AccountTokenExpired;
 
     MessageResponse updateUserRole(String userRole);
 
