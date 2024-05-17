@@ -7,4 +7,5 @@ import java.util.Optional;
 
 public interface UserTokenRepository extends JpaRepository<AccountActivationToken, String> {
     Optional<AccountActivationToken> findByAccountToken(String token);
+    void deleteByUserId(Long userId);
 }

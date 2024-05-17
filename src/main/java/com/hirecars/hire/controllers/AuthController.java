@@ -9,6 +9,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -18,6 +19,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
+@EnableTransactionManagement
 public class AuthController {
 
     private final UserService userService;
@@ -51,8 +53,6 @@ public class AuthController {
 
     @GetMapping("/activateAccount/{usertoken}")
     public ResponseEntity<String> activate(@PathVariable(name = "usertoken") String userToken) {
-
-        userService.activateAccount(userToken);
-        return new ResponseEntity<>("Success", HttpStatus.OK);
+        return new ResponseEntity<>(userService.activateAccount(userToken), HttpStatus.OK);
     }
 }

@@ -5,7 +5,7 @@ import lombok.Getter;
 import java.time.LocalDateTime;
 
 @Getter
-public class AccountTokenExpired extends Exception{
+public class AccountTokenExpired extends RuntimeException{
     private String message;
     private LocalDateTime timestamp;
 

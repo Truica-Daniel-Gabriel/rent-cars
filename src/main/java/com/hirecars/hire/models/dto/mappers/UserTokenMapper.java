@@ -12,9 +12,9 @@ public class UserTokenMapper {
     public AccountActivationToken getUserToken(Long id) {
         return AccountActivationToken
                 .builder()
-                .account_token(generateRandomToken())
-                .created_at(LocalDateTime.now())
-                .user_id(id)
+                .accountToken(generateRandomToken())
+                .createdAt(LocalDateTime.now())
+                .userId(id)
                 .build();
     }
     private String generateRandomToken() {

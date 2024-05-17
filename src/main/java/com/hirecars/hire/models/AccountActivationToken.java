@@ -1,15 +1,15 @@
 package com.hirecars.hire.models;
 
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
 @Getter
 @Setter
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "user_tokens")
 public class AccountActivationToken {
@@ -18,10 +18,10 @@ public class AccountActivationToken {
     Long id;
 
     @Column(name = "user_id")
-    Long user_id;
+    Long userId;
     @Column(name = "created_at")
-    LocalDateTime created_at;
+    LocalDateTime createdAt;
 
     @Column(name = "account_token")
-    String account_token;
+    String accountToken;
 }

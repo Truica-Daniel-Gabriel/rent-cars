@@ -35,6 +35,6 @@
     <body>
       <h1 class="title">Account confirmation</h1>
       <h2>Hello $userName</h2>
-      <p class="description">Thanks for registering, you are almost done, what you need to do now is to activate your account by clicking <a href="http://localhost:8081/api/v1/auth/activateAccount/$userToken">here</a>.</p>
+      <p class="description">Thanks for registering, you are almost done, what you need to do now is to activate your account by clicking <a href="http://localhost:8081/api/v1/auth/activateAccount/$userToken" target="_blank">here</a>.</p>
     </body>
 </html>
