@@ -17,7 +17,6 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -31,6 +30,10 @@ public class UserServiceImplementation implements UserService {
 
     @Override
     public RegisterResponse register(RegisterRequest userCredentials) {
+        if(userRepository.findByEmail(userCredentials.getEmail()).isPresent()) {
+            throw new BusinessException("This user already exists", HttpStatus.BAD_REQUEST);
+        }
+
         User savedUser = userRepository.save(new UserMapper().getUserFrom(userCredentials));
 
         AccountActivationToken savedToken = userTokenRepository.save(new UserTokenMapper().getUserToken(savedUser.getId()));
@@ -42,7 +45,7 @@ public class UserServiceImplementation implements UserService {
         RegisterResponse userRegister = RegisterResponse
                 .builder()
                 .account_token(savedToken.getAccountToken())
-                .message("Created")
+                .message("The user has been successfully registered")
                 .fullName(savedUser.getFullName())
                 .email(savedUser.getEmail())
                 .build();
@@ -59,7 +62,7 @@ public class UserServiceImplementation implements UserService {
 
     @Override
     @Transactional
-    public String activateAccount(String userToken) {
+    public MessageResponse activateAccount(String userToken) {
         AccountActivationToken token = userTokenRepository.findByAccountToken(userToken).orElseThrow(() -> new BusinessException("Account token not found", HttpStatus.NOT_FOUND));
         User user= userRepository.findById(token.getId()).orElseThrow(()-> new BusinessException("User not found", HttpStatus.NOT_FOUND));
         Duration duration = Duration.between(token.getCreatedAt(), LocalDateTime.now());
@@ -72,7 +75,7 @@ public class UserServiceImplementation implements UserService {
         userTokenRepository.deleteByUserId(user.getId());
         userRepository.save(user);
 
-       return "Your account was activated";
+       return MessageResponse.builder().message(user.getUsername()).build();
 
     }
 
