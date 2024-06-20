@@ -1,5 +1,7 @@
 package com.hirecars.hire.models;
 
+import com.hirecars.hire.models.enums.AccountStatus;
+import com.hirecars.hire.models.enums.UserRole;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;

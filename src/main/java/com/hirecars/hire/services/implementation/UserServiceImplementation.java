@@ -2,20 +2,25 @@ package com.hirecars.hire.services.implementation;
 
 import com.hirecars.hire.core.exceptions.AccountTokenExpired;
 import com.hirecars.hire.core.exceptions.BusinessException;
-import com.hirecars.hire.models.AccountStatus;
+import com.hirecars.hire.models.enums.AccountStatus;
 import com.hirecars.hire.models.User;
 import com.hirecars.hire.models.AccountActivationToken;
 import com.hirecars.hire.models.dto.mappers.UserMapper;
 import com.hirecars.hire.models.dto.mappers.UserTokenMapper;
+import com.hirecars.hire.models.dto.request.LoginRequest;
 import com.hirecars.hire.models.dto.request.RegisterRequest;
+import com.hirecars.hire.models.dto.response.LoginResponse;
 import com.hirecars.hire.models.dto.response.MessageResponse;
 import com.hirecars.hire.models.dto.response.RegisterResponse;
 import com.hirecars.hire.repositories.UserRepository;
 import com.hirecars.hire.repositories.UserTokenRepository;
+import com.hirecars.hire.services.JwtService;
 import com.hirecars.hire.services.UserService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
@@ -27,6 +32,9 @@ public class UserServiceImplementation implements UserService {
 
     private final UserRepository userRepository;
     private final UserTokenRepository userTokenRepository;
+    private final JwtService jwtService;
+    private final AuthenticationProvider authenticationProvider;
+    private final UserMapper userMapper;
 
     @Override
     public RegisterResponse register(RegisterRequest userCredentials) {
@@ -34,7 +42,7 @@ public class UserServiceImplementation implements UserService {
             throw new BusinessException("This user already exists", HttpStatus.BAD_REQUEST);
         }
 
-        User savedUser = userRepository.save(new UserMapper().getUserFrom(userCredentials));
+        User savedUser = userRepository.save(userMapper.getUserFrom(userCredentials));
 
         AccountActivationToken savedToken = userTokenRepository.save(new UserTokenMapper().getUserToken(savedUser.getId()));
 
@@ -53,6 +61,24 @@ public class UserServiceImplementation implements UserService {
         return userRegister;
     }
 
+    @Override
+    public LoginResponse login(LoginRequest payload) {
+
+        authenticationProvider.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        payload.getEmail(),
+                        payload.getPassword()
+                )
+        );
+
+        String token = jwtService.generateToken(payload.getEmail());
+
+        return LoginResponse
+                .builder()
+                .jwtToken(token)
+                .email(payload.getEmail())
+                .build();
+    }
 
 
     @Override
@@ -75,7 +101,7 @@ public class UserServiceImplementation implements UserService {
         userTokenRepository.deleteByUserId(user.getId());
         userRepository.save(user);
 
-       return MessageResponse.builder().message(user.getUsername()).build();
+       return MessageResponse.builder().message(user.getFullName()).build();
 
     }
 

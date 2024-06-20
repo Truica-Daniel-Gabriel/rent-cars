@@ -4,6 +4,7 @@ import com.hirecars.hire.core.exceptions.BusinessException;
 import com.hirecars.hire.core.exceptions.ExceptionResponse;
 import com.hirecars.hire.models.dto.request.LoginRequest;
 import com.hirecars.hire.models.dto.request.RegisterRequest;
+import com.hirecars.hire.models.dto.response.LoginResponse;
 import com.hirecars.hire.models.dto.response.MessageResponse;
 import com.hirecars.hire.models.dto.response.RegisterResponse;
 import com.hirecars.hire.services.EmailService;
@@ -37,13 +38,18 @@ public class AuthController {
     @Operation(
             summary = "Login user by user credentials",
             responses = {
-                    @ApiResponse(responseCode = "200", description = "User was authenticated", content = @Content),
-                    @ApiResponse(responseCode = "404", description = "Invalid credentials", content = @Content)
+                    @ApiResponse(responseCode = "200", description = "User was authenticated", content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = LoginResponse.class)
+                    )),
+                    @ApiResponse(responseCode = "404", description = "Invalid credentials", content = @Content(
+                            mediaType = "application/json"
+                    ))
             }
     )
     @PostMapping("/login")
-    public ResponseEntity<MessageResponse> login(@RequestBody LoginRequest user){
-       return new ResponseEntity<>(MessageResponse.builder().message("Created").build(), HttpStatus.OK);
+    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest payload){
+       return new ResponseEntity<>(userService.login(payload), HttpStatus.OK);
     }
 
 

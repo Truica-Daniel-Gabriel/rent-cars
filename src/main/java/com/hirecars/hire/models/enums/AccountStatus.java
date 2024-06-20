@@ -1,4 +1,4 @@
-package com.hirecars.hire.models;
+package com.hirecars.hire.models.enums;
 
 public enum AccountStatus {
     ACTIVE,
